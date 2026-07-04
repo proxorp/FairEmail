@@ -30,6 +30,15 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
+### 1.2325 2026-07-04
+
+* Fixed a [security issue](https://github.com/M66B/FairEmail/security/advisories/GHSA-w92m-2v27-mvg9)
+* Added workaround for Migadu IMAP server bug
+* Allowed batch importing of S/MIME public keys
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2324 2026-06-30
 
 * Fixed regression in reformatted message view
