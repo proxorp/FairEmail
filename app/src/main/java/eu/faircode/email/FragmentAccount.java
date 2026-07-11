@@ -2170,45 +2170,56 @@ public class FragmentAccount extends FragmentBase {
     private Snackbar lanSnackbar = null;
 
     private void checkLan(String host) {
-        boolean lan = false;
-        if (!TextUtils.isEmpty(host) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN)
-            try {
-                Context context = getContext();
-                InetAddress addr = InetAddress.getByName(host);
-                lan = (addr.isSiteLocalAddress() || addr.isLinkLocalAddress() || addr.isLoopbackAddress()) &&
-                        !Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK);
-            } catch (Throwable ignored) {
+        Bundle args = new Bundle();
+        args.putString("host", host);
+
+        new SimpleTask<Boolean>() {
+            @Override
+            protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                String host = args.getString("host");
+                return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN &&
+                        ConnectionHelper.isLocalAddress(host, false) &&
+                        !Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK));
             }
 
-        if (lan && lanSnackbar == null) {
-            lanSnackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
-            Helper.setSnackbarLines(lanSnackbar, 2);
-            lanSnackbar.setAction(R.string.title_fix, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lanSnackbar.dismiss();
-                    if (BuildConfig.PLAY_STORE_RELEASE)
-                        Helper.viewFAQ(v.getContext(), 210);
-                    else
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
-                }
-            });
-            lanSnackbar.addCallback(new Snackbar.Callback() {
-                @Override
-                public void onShown(Snackbar sb) {
-                    view.requestApplyInsets();
-                }
+            @Override
+            protected void onExecuted(Bundle args, Boolean data) {
+                boolean lan17 = Boolean.TRUE.equals(data);
+                if (lan17 && lanSnackbar == null) {
+                    lanSnackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
+                    Helper.setSnackbarLines(lanSnackbar, 2);
+                    lanSnackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            lanSnackbar.dismiss();
+                            if (BuildConfig.PLAY_STORE_RELEASE)
+                                Helper.viewFAQ(v.getContext(), 210);
+                            else
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
+                        }
+                    });
+                    lanSnackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onShown(Snackbar sb) {
+                            view.requestApplyInsets();
+                        }
 
-                @Override
-                public void onDismissed(Snackbar transientBottomBar, int event) {
-                    view.requestApplyInsets();
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            view.requestApplyInsets();
+                        }
+                    });
+                    lanSnackbar.show();
+                } else if (!lan17 && lanSnackbar != null) {
+                    lanSnackbar.dismiss();
+                    lanSnackbar = null;
                 }
-            });
-            lanSnackbar.show();
-        } else if (!lan && lanSnackbar != null) {
-            lanSnackbar.dismiss();
-            lanSnackbar = null;
-        }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ignored) {
+            }
+        }.execute(this, args, "checklan");
     }
 
     @Override
