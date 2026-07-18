@@ -945,7 +945,7 @@ public class FragmentIdentity extends FragmentBase {
                 if (synchronize && TextUtils.isEmpty(password) && !insecure && certificate == null && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
 
-                if (!TextUtils.isEmpty(replyto) && !should) {
+                if (!TextUtils.isEmpty(replyto) && !MessageHelper.hasPlaceholder(replyto) && !should) {
                     try {
                         InternetAddress[] addresses = InternetAddress.parse(replyto);
                         if (addresses.length != 1)
@@ -956,7 +956,7 @@ public class FragmentIdentity extends FragmentBase {
                     }
                 }
 
-                if (!TextUtils.isEmpty(cc) && !should)
+                if (!TextUtils.isEmpty(cc) && !MessageHelper.hasPlaceholder(cc) && !should)
                     try {
                         for (InternetAddress address : InternetAddress.parse(cc))
                             address.validate();
@@ -964,7 +964,7 @@ public class FragmentIdentity extends FragmentBase {
                         throw new IllegalArgumentException(context.getString(R.string.title_email_invalid, cc));
                     }
 
-                if (!TextUtils.isEmpty(bcc) && !should)
+                if (!TextUtils.isEmpty(bcc) && !MessageHelper.hasPlaceholder(bcc) && !should)
                     try {
                         for (InternetAddress address : InternetAddress.parse(bcc))
                             address.validate();

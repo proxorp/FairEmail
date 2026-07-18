@@ -858,9 +858,13 @@ public class MessageHelper {
         return new InternetAddress(email, name, StandardCharsets.UTF_8.name());
     }
 
+    public static boolean hasPlaceholder(String address) {
+        return (!TextUtils.isEmpty(address) &&
+                (address.contains("$from$")) || address.contains("$user$") || address.contains("$domain$") || address.contains("$extra$"));
+    }
+
     static String replacePlaceholders(String address, EntityMessage message, EntityIdentity identity) throws UnsupportedEncodingException {
-        if (!TextUtils.isEmpty(address) &&
-                (address.contains("$from$")) || address.contains("$user$") || address.contains("$domain$") || address.contains("$extra$")) {
+        if (hasPlaceholder(address)) {
             Address from = getFrom(message, identity);
             if (from instanceof InternetAddress) {
                 String email = ((InternetAddress) from).getAddress();
