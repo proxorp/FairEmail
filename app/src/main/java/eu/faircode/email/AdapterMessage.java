@@ -9025,17 +9025,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             private void log(String msg, long id) {
                 Log.i(msg + " id=" + id);
-                if (BuildConfig.DEBUG || debug)
-                    parentFragment.getView().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (properties.getValue("expanded", id)) {
-                                Context context = parentFragment.getContext();
-                                if (context != null)
-                                    ToastEx.makeText(context, msg + " id=" + id, Toast.LENGTH_SHORT).show();
+                if (BuildConfig.DEBUG || debug) {
+                    View view = parentFragment.getView();
+                    if (view != null) {
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (properties.getValue("expanded", id)) {
+                                    Context context = parentFragment.getContext();
+                                    if (context != null)
+                                        ToastEx.makeText(context, msg + " id=" + id, Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }
             }
         };
 
