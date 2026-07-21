@@ -57,7 +57,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateParsingException;
