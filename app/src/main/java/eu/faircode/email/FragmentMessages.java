@@ -6420,16 +6420,14 @@ public class FragmentMessages extends FragmentBase
                 if (accounts != null)
                     for (EntityAccount account : accounts)
                         try {
-                            InetAddress addr = InetAddress.getByName(account.host);
-                            if (addr.isSiteLocalAddress() || addr.isLinkLocalAddress() || addr.isLoopbackAddress())
+                            if (ConnectionHelper.isLocalAddress(account.host, false))
                                 return true;
 
                             List<EntityIdentity> identities = db.identity().getSynchronizingIdentities(account.id);
                             if (identities != null)
                                 for (EntityIdentity identity : identities)
                                     try {
-                                        addr = InetAddress.getByName(identity.host);
-                                        if (addr.isSiteLocalAddress() || addr.isLinkLocalAddress() || addr.isLoopbackAddress())
+                                        if (ConnectionHelper.isLocalAddress(identity.host, false))
                                             return true;
                                     } catch (Throwable ignored) {
                                     }
