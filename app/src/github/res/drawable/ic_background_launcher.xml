@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- fork: FairEmailX distinct launcher icon (purple) vs upstream light-blue -->
+    <gradient
+        android:angle="135"
+        android:endColor="#ab47bc"
+        android:startColor="#6a1b9a"
+        android:type="linear" />
+    <!-- start: Deep Purple 800  end: Purple 400 -->
+</shape>
