@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fork: distinguish this self-built unlocked flavor from the Play-store FairEmail on-device -->
+    <string name="app_name" translatable="false">FairEmailX</string>
+</resources>
