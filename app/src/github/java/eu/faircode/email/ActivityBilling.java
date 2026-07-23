@@ -256,12 +256,8 @@ public class ActivityBilling extends ActivityBase implements
     }
 
     static boolean isPro(Context context) {
-        if (BuildConfig.DEBUG && false)
-            return true;
-        if (context == null)
-            return false;
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("pro", false);
+        // fork modification: unlock all pro features in this self-built GPLv3 build
+        return true;
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
